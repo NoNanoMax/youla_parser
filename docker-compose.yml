@@ -1,0 +1,23 @@
+services:
+  api-dev:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - HEADLESS=true
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
+    profiles: ["dev"]
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - HEADLESS=true
+      - MAX_CONCURRENCY=3
+      - NAV_TIMEOUT_MS=20000
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --log-level info
+    restart: unless-stopped
+    profiles: ["prod"]
