@@ -23,7 +23,7 @@ async def collect_ad_urls_from_search(page, search_url: str, max_ads: int = 300)
 
     seen = set()
 
-    for step in range(20):
+    for step in range(8):
         hrefs = await page.eval_on_selector_all("a[href]", "els => els.map(e => e.href).filter(Boolean)")
         for h in hrefs:
             if AD_RE.match(h):

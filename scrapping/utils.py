@@ -61,7 +61,7 @@ async def get_meta(page, name):
 
     await page.wait_for_selector('dl[data-test-component="DescriptionList"]')
     dl = (page.locator('dl[data-test-component="DescriptionList"]')
-        .filter(has=page.locator('dt', has_text='Описание'))
+        .filter(has=page.locator('dt', has_text=name))
         .first)
     dl.wait_for()
 
