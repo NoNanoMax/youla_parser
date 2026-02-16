@@ -1,5 +1,5 @@
 from playwright.async_api import TimeoutError as PWTimeout
-from scrapping.utils import click_largest_image, largest_visible_img_src, normalize_youla_image_url
+from scrapping.utils import click_largest_image, largest_visible_img_src, normalize_youla_image_url, get_meta
 
 
 async def parse_web(browser, url):
@@ -27,11 +27,17 @@ async def parse_web(browser, url):
         all_urls = [normalize_youla_image_url(url) for url in all_urls]
         all_urls = [url for url in all_urls if url]
 
+        description = await get_meta(page, "Описание")
+        meta = await get_meta(page, "Модель")
+
         return {
             "url": url,
-            "title": None,
+            "title": description.get("Описание", None),
             "published_at": None, 
-            "photo_urls": all_urls
+            "photo_urls": all_urls,
+            "year": meta.get("Год выпуска", None),
+            "company": meta.get("Марка", None), 
+            "brand": meta.get("Модель", None)
         }
     
     except PWTimeout:

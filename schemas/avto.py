@@ -9,4 +9,5 @@ class AvtoOut(BaseModel):
     photo_urls: list[AnyUrl] = []
     color: str | None = None
     year: int | None = None
+    company: str | None = None
     brand: str | None = None

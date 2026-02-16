@@ -57,6 +57,34 @@ async def click_largest_image(page):
     """)
 
 
+async def get_meta(page, name):
+
+    await page.wait_for_selector('dl[data-test-component="DescriptionList"]')
+    dl = (page.locator('dl[data-test-component="DescriptionList"]')
+        .filter(has=page.locator('dt', has_text='Описание'))
+        .first)
+    dl.wait_for()
+
+    specs = await dl.evaluate("""
+    (root) => {
+    const out = {};
+    for (const dt of root.querySelectorAll('dt')) {
+        const key = dt.textContent?.trim();
+        const dd = dt.nextElementSibling;
+        if (!key || !dd || dd.tagName.toLowerCase() !== 'dd') continue;
+
+        const val = (dd.textContent || '').trim();
+        if (!val || val === '…') continue;
+
+        out[key] = val;
+    }
+    return out;
+    }
+    """)
+
+    return specs
+
+
 def normalize_youla_image_url(url: str) -> str | None:
     re_pat = re.compile(r'^(https?://cdn\d+\.youla\.io/files/images/)\d+_\d+_out(/.+)$', re.I)
     m = re_pat.match(url)
