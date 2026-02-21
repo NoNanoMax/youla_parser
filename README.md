@@ -15,7 +15,7 @@ For each ad:
 
 #### How to run
 
-```sudo docker compose up --build -d```
+```sudo docker compose --profile dev up --build -d```
 
 ----
 
